@@ -1,0 +1,24 @@
+- hosts: ca_nodes
+  become: yes
+  roles:
+  - jumperfly.ca
+  tags:
+  - ca
+  - generate-certs
+  - generate-certs-kube
+- hosts: etcd_nodes
+  become: yes
+  roles:
+  - { role: jumperfly.etcd_node, ca_host: node1 }
+  tags:
+  - etcd
+- hosts: kube_master_nodes
+  become: yes
+  roles:
+  - { role: kubernetes_node, kube_master_node: yes, ca_host: node1 }
+  tags:
+  - kube
+- hosts: kube_nodes
+  become: yes
+  roles:
+  - { role: kubernetes_node, ca_host: node1 }

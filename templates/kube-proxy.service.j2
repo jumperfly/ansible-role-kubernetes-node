@@ -1,0 +1,12 @@
+[Unit]
+Description=kube-proxy
+Documentation=https://kubernetes.io/docs/
+
+[Service]
+ExecStart=/usr/local/bin/kube-proxy --master {{ kube_apiserver_url }} --kubeconfig=/var/lib/kube-proxy/kubeconfig --cluster-cidr={{ kube_pod_cidr_range }}
+Restart=always
+StartLimitInterval=0
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

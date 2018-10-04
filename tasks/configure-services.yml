@@ -1,0 +1,31 @@
+- name: Create kubelet service override directory
+  file: path=/etc/systemd/system/kubelet.service.d state=directory
+- name: Configure kubelet service
+  template: src=kubelet-override.conf.j2 dest=/etc/systemd/system/kubelet.service.d/override.conf
+
+- name: Ensure kubelet service is running
+  service: name=kubelet state=started
+- name: Ensure kubelet service is enabled
+  service: name=kubelet enabled=yes
+
+- name: Create service file
+  template:
+    src: kube-proxy.service.j2
+    dest: /etc/systemd/system/kube-proxy.service
+  register: create_kube_proxy_service_result
+- name: Reload service file
+  command: systemctl daemon-reload
+  when: create_kube_proxy_service_result.changed
+
+- name: Ensure kube-proxy service is running
+  service: name=kube-proxy state=started
+- name: Ensure kube-proxy service is enabled
+  service: name=kube-proxy enabled=yes
+
+- name: Wait for apiserver to start on master (up to 5 minutes)
+  wait_for: port=8080 timeout=300
+  when: kube_master_node
+  register: wait_for_apiserver_result
+- name: Pause for apiserver to start fully (10 seconds)
+  pause: seconds=10
+  when: kube_master_node and wait_for_apiserver_result.elapsed|default(0) > 0

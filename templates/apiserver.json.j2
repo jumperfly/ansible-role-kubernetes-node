@@ -1,0 +1,83 @@
+{
+  "kind": "Pod",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "kube-apiserver"
+  },
+  "spec": {
+    "hostNetwork": true,
+    "containers": [
+      {
+        "name": "kube-apiserver",
+        "image": "k8s.gcr.io/hyperkube:v{{ kube_version }}",
+        "command": [
+          "/hyperkube",
+          "apiserver",
+          "--allow-privileged=true",
+          "--advertise-address={{ kube_apiserver_listen_ip }}",
+          "--bind-address={{ kube_apiserver_listen_ip }}",
+          "--etcd-servers=
+            {%- for h in groups[kube_apiserver_etcd_group] -%}
+              https://{{ h }}:2379
+              {%- if not loop.last %},{% endif %}
+            {%- endfor -%}
+          ",
+          "--etcd-cafile={{ kube_ca_cert }}",
+          "--etcd-certfile={{ kube_cert }}",
+          "--etcd-keyfile={{ kube_key }}",
+          "--enable-admission-plugins={{ kube_apiserver_admission_plugins }}",
+          "--tls-cert-file={{ kube_cert }}",
+          "--tls-private-key-file={{ kube_key }}",
+          "--client-ca-file={{ kube_ca_cert }}"
+        ],
+        "ports": [
+          {
+            "name": "https",
+            "hostPort": 443,
+            "containerPort": 443
+          },
+          {
+            "name": "local",
+            "hostPort": 8080,
+            "containerPort": 8080
+          }
+        ],
+        "volumeMounts": [
+          {
+            "name": "srvkube",
+            "mountPath": "/srv/kubernetes",
+            "readOnly": true
+          },
+          {
+            "name": "varlog",
+            "mountPath": "/var/log"
+          }
+        ],
+        "livenessProbe": {
+          "httpGet": {
+            "scheme": "HTTP",
+            "host": "127.0.0.1",
+            "port": 8080,
+            "path": "/healthz"
+          },
+          "initialDelaySeconds": 15,
+          "timeoutSeconds": 15
+        }
+      }
+    ],
+    "volumes": [
+      {
+        "name": "srvkube",
+        "hostPath": {
+          "path": "/srv/kubernetes"
+        }
+      },
+      {
+        "name": "varlog",
+        "hostPath": {
+          "path": "/var/log"
+        }
+      }
+    ]
+  }
+}

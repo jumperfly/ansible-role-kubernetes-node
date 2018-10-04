@@ -1,0 +1,17 @@
+dependencies:
+  - {
+      role: jumperfly.docker,
+      docker_version: "{{ kube_docker_version }}",
+      docker_daemon_json_data: "{{ kube_docker_daemon_json_data }}"
+    }
+
+galaxy_info:
+  role_name: kubernetes_node
+  author: jumperfly
+  description: ansible-role-kubernetes-node
+  license: Apache
+  min_ansible_version: "2.0"
+  platforms:
+    - name: EL
+      versions:
+        - "7"

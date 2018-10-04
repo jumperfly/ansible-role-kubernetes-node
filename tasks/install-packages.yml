@@ -1,0 +1,41 @@
+- name: Configure Kubernetes YUM repository
+  yum_repository:
+    name: kubernetes
+    description: kubernetes
+    baseurl: "{{ kube_yum_repo_url }}"
+    gpgkey: "{{ kube_yum_repo_gpg }}"
+    gpgcheck: yes
+    repo_gpgcheck: yes
+- name: Ensure kubernetes binaries are installed
+  package: name={{ item }}-{{ kube_version }} state=latest
+  loop:
+    - kubelet
+    - kubectl
+- name: Ensure config directories exist
+  file: path=/var/lib/{{ item }} state=directory
+  loop:
+    - kubelet
+    - kube-proxy
+- name: Copy kubeconfig files
+  template: src={{ item }}-kubeconfig.j2 dest=/var/lib/{{ item }}/kubeconfig
+  loop:
+    - kubelet
+    - kube-proxy
+
+- name: Download kube node archive
+  get_url:
+    url: "{{ kube_node_archive_url }}"
+    dest: /opt/{{ kube_node_archive }}
+    checksum: "{{ kube_node_archive_checksum }}"
+  register: download_kube_node_archive
+- name: Extract kube node archive
+  unarchive:
+    src: /opt/{{ kube_node_archive }}
+    dest: /opt/
+    remote_src: yes
+  when: download_kube_node_archive.changed
+- name: Create symlinks
+  file:
+    src: /opt/kubernetes/node/bin/kube-proxy
+    dest: /usr/local/bin/kube-proxy
+    state: link
