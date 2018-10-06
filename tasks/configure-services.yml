@@ -26,6 +26,6 @@
   wait_for: port=8080 timeout=300
   when: kube_master_node
   register: wait_for_apiserver_result
-- name: Pause for apiserver to start fully (10 seconds)
-  pause: seconds=10
+- name: Pause for apiserver to start fully (20 seconds)
+  pause: seconds=20
   when: kube_master_node and wait_for_apiserver_result.elapsed|default(0) > 0
