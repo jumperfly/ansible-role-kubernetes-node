@@ -8,8 +8,6 @@ kube_docker_daemon_json_data: |
   }
 
 # Kubernetes configuration
-kube_master_node: no
-kube_master_nodes_group: kube_master_nodes
 kube_version: 1.12.0
 kube_yum_repo_url: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
 kube_yum_repo_gpg: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
@@ -17,28 +15,14 @@ kube_apiserver_url: https://kubernetes:6443
 kube_iface: eth0
 
 # Kubernetes kubelet configuration
-kube_kubelet_args: "{{
-  '--kubeconfig=/var/lib/kubelet/kubeconfig --pod-manifest-path=/etc/kubernetes/manifests --node-labels kubernetes.io/role=master --register-with-taints dedicated=master:NoSchedule'
-  if kube_master_node else
-  '--kubeconfig=/var/lib/kubelet/kubeconfig --pod-manifest-path=/etc/kubernetes/manifests'
-}}"
+kube_kubelet_config: /var/lib/kubelet/kubeconfig
+kube_kubelet_args: --kubeconfig={{ kube_kubelet_config }} --pod-manifest-path=/etc/kubernetes/manifests
 
 # Kubernetes kube_proxy configuration
 kube_node_archive: kubernetes-node-linux-amd64.tar.gz
 kube_node_archive_url: https://dl.k8s.io/v{{ kube_version }}/{{ kube_node_archive }}
 kube_node_archive_checksum: sha512:6e0d16a21bd0f9a84222838cf75532a32df350b08b5073b3dbbc3338720daf6a1c24927ee191175d2d07a5b9d3d8bf6b5aaf3cfef6dfeb1f010c6a5f442e5e5e
-
-# Kubernetes apiserver configuration
-kube_apiserver_listen_ip: "{{ ip }}"
-kube_apiserver_etcd_group: etcd_nodes
-kube_apiserver_admission_plugins: NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota
-
-# Kubernetes controller-manager configuration
-kube_controller_manager_listen_ip: "{{ ip }}"
-kube_pod_cidr_range: "10.201.0.0/16"
-
-# Flannel configuration
-flannel_version: 0.10.0
+kube_pod_cidr_range: 10.201.0.0/16
 
 # SSL configuration
 kube_key: /srv/kubernetes/server.key

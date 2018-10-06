@@ -15,10 +15,17 @@
 - hosts: kube_master_nodes
   become: yes
   roles:
-  - { role: kubernetes_node, kube_master_node: yes, ca_host: node1 }
+  - { role: kubernetes_master, ca_host: node1 }
   tags:
   - kube
 - hosts: kube_nodes
   become: yes
   roles:
   - { role: kubernetes_node, ca_host: node1 }
+- hosts: kube_master_nodes,kube_nodes
+  become: yes
+  roles:
+  - jumperfly.flannel
+  tags:
+  - flannel
+

@@ -6,15 +6,7 @@
   tags:
   - install-packages
   - install-packages-kube
-- include: kube-master.yml
-  when: kube_master_node
-  tags:
-  - kube-master
 - include: configure-services.yml
   tags:
   - configure-services
   - configure-services-kube
-- include: flannel.yml
-  tags:
-  - kube-master
-  - flannel
