@@ -64,7 +64,7 @@ Vagrant.configure("2") do |config|
         config.vm.box_version = "1804.02.01"
         config.vm.provision "shell", inline: <<-SHELL
           ansible-galaxy install -r /vagrant/tests/requirements.yml -p /etc/ansible/roles
-          ln -snf /vagrant/ /etc/ansible/roles/kubernetes_node
+          ln -snf /vagrant/ /etc/ansible/roles/jumperfly.kubernetes_node
         SHELL
         config.vm.provision "ansible_local" do |ansible|
           ansible.compatibility_mode = "2.0"
