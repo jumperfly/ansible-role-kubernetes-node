@@ -28,4 +28,9 @@
   - jumperfly.flannel
   tags:
   - flannel
-
+- hosts: kube_master_nodes[0]
+  become: yes
+  roles:
+  - jumperfly.coredns
+  tags:
+  - coredns
