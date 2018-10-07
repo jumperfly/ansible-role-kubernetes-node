@@ -6,3 +6,4 @@
 **/.vagrant
 **/.terraform
 **/*.box
+**/*.retry
