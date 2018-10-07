@@ -5,7 +5,7 @@
     baseurl: "{{ kube_yum_repo_url }}"
     gpgkey: "{{ kube_yum_repo_gpg }}"
     gpgcheck: yes
-    repo_gpgcheck: yes
+    repo_gpgcheck: "{{ kube_yum_repo_repo_gpgcheck }}"
 - name: Ensure kubernetes binaries are installed
   package: name={{ item }}-{{ kube_version }} state=latest
   loop:

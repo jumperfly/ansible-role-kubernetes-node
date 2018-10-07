@@ -35,6 +35,11 @@ Vagrant.configure("2") do |config|
         "ip": ip,
         "kube_iface": "eth1",
         "kube_node_cidr_range": "10.201.#{i}.1/24"
+        #"docker_yum_repo_url": "http://#{$ip_prefix}.1:8080/linux/centos/7/x86_64/stable",
+        #"docker_yum_repo_gpg": "http://#{$ip_prefix}.1:8080/linux/centos/gpg",
+        #"kube_yum_repo_url": "http://#{$ip_prefix}.1:8081/yum/repos/kubernetes-el7-x86_64",
+        #"kube_yum_repo_gpg": "http://#{$ip_prefix}.1:8081/yum/doc/rpm-package-key.gpg",
+        #"kube_yum_repo_repo_gpgcheck": "no"
       }
 
       if i == 1
@@ -63,8 +68,9 @@ Vagrant.configure("2") do |config|
         config.vm.box = "jumperfly/centos-7-ansible"
         config.vm.box_version = "1804.02.01"
         config.vm.provision "shell", inline: <<-SHELL
-          ansible-galaxy install -r /vagrant/tests/requirements.yml -p /etc/ansible/roles
+          mkdir -p /etc/ansible/roles
           ln -snf /vagrant/ /etc/ansible/roles/jumperfly.kubernetes_node
+          ansible-galaxy install --ignore-errors -r /vagrant/tests/requirements.yml -p /etc/ansible/roles
         SHELL
         config.vm.provision "ansible_local" do |ansible|
           ansible.compatibility_mode = "2.0"
