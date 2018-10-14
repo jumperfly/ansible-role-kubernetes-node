@@ -1,0 +1,73 @@
+{
+  "kind": "Pod",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "kube-proxy",
+    "namespace": "kube-system"
+  },
+  "spec": {
+    "hostNetwork": true,
+    "containers": [
+      {
+        "name": "kube-proxy",
+        "image": "k8s.gcr.io/hyperkube:v{{ kube_version }}",
+        "command": [
+          "/hyperkube",
+          "kube-proxy",
+          "--master={{ kube_apiserver_url }}",
+          "--kubeconfig=/var/lib/kube-proxy/kubeconfig",
+          "--cluster-cidr={{ kube_pod_cidr_range }}"
+        ],
+        "securityContext": {
+          "privileged": true
+        },
+        "volumeMounts": [
+          {
+            "name": "srvkube",
+            "mountPath": "/srv/kubernetes",
+            "readOnly": true
+          },
+          {
+            "name": "kubeconfig",
+            "mountPath": "/var/lib/kube-proxy/kubeconfig",
+            "readOnly": true
+          },
+          {
+            "name": "varlog",
+            "mountPath": "/var/log"
+          }
+        ],
+        "livenessProbe": {
+          "httpGet": {
+            "scheme": "HTTP",
+            "host": "127.0.0.1",
+            "port": 10256,
+            "path": "/healthz"
+          },
+          "initialDelaySeconds": 15,
+          "timeoutSeconds": 15
+        }
+      }
+    ],
+    "volumes": [
+      {
+        "name": "srvkube",
+        "hostPath": {
+          "path": "/srv/kubernetes"
+        }
+      },
+      {
+        "name": "kubeconfig",
+        "hostPath": {
+          "path": "/var/lib/kube-proxy/kubeconfig"
+        }
+      },
+      {
+        "name": "varlog",
+        "hostPath": {
+          "path": "/var/log"
+        }
+      }
+    ]
+  }
+}

@@ -22,10 +22,7 @@ kube_kubelet_config: /var/lib/kubelet/kubeconfig
 kube_kubelet_args: --kubeconfig={{ kube_kubelet_config }} --pod-manifest-path=/etc/kubernetes/manifests --cluster-dns={{ kube_cluster_dns }} --cluster-domain={{ kube_cluster_domain }}
 
 # Kubernetes kube_proxy configuration
-kube_node_archive: kubernetes-node-linux-amd64.tar.gz
-kube_node_archive_url: https://dl.k8s.io/v{{ kube_version }}/{{ kube_node_archive }}
-kube_node_archive_checksum: sha512:f59f302119dddeb13e11abf321bd17ca0d44d04013d2f142e91590d25ccd2c83a9ab0835bb0634a3baff86f103a5f968021f77739a772736f056e0071d1f115a
-kube_pod_cidr_range: 10.201.0.0/16
+kube_pod_cidr_range: 10.201.0.0/16 # Also configured in kubernetes_master role
 
 # SSL configuration
 kube_key: /srv/kubernetes/server.key
