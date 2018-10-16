@@ -12,6 +12,7 @@ kube_version: 1.12.1
 kube_yum_repo_url: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
 kube_yum_repo_gpg: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 kube_yum_repo_repo_gpgcheck: yes
+kube_docker_registry: k8s.gcr.io
 kube_apiserver_url: https://kubernetes:6443
 kube_iface: eth0
 kube_cluster_dns: 10.0.0.10 # Also configured in coredns role as coredns_cluster_ip

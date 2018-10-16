@@ -21,5 +21,6 @@
   loop:
     - kubelet
     - kube-proxy
+
 - name: Pull hyperkube image
-  docker_image: name=k8s.gcr.io/hyperkube tag=v{{ kube_version }}
+  docker_image: name={{ kube_docker_registry }}/hyperkube tag=v{{ kube_version }}
