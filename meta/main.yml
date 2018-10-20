@@ -1,4 +1,5 @@
 dependencies:
+  - jumperfly.ansible_common
   - {
       role: jumperfly.docker,
       docker_version: "{{ kube_docker_version }}",
