@@ -1,9 +1,8 @@
 dependencies:
   - jumperfly.ansible_common
   - {
-      role: jumperfly.docker,
-      docker_version: "{{ kube_docker_version }}",
-      docker_daemon_json_data: "{{ kube_docker_daemon_json_data }}"
+      role: jumperfly.kubelet,
+      kubelet_args: "{{ kube_node_kubelet_args }}"
     }
 
 galaxy_info:

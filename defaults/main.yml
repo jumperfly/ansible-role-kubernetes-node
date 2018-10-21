@@ -1,17 +1,5 @@
-# Docker configuration - overrides for docker role
-kube_docker_version: 18.06.*
-kube_docker_daemon_json_data: |
-  {
-    "iptables": false,
-    "ip-masq": false,
-    "mtu": 0
-  }
-
 # Kubernetes configuration
 kube_version: 1.12.1
-kube_yum_repo_url: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
-kube_yum_repo_gpg: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-kube_yum_repo_repo_gpgcheck: yes
 kube_docker_registry: k8s.gcr.io
 kube_apiserver_url: https://kubernetes:6443
 kube_iface: eth0
@@ -20,7 +8,7 @@ kube_cluster_domain: cluster.local
 
 # Kubernetes kubelet configuration
 kube_kubelet_config: /var/lib/kubelet/kubeconfig
-kube_kubelet_args: --kubeconfig={{ kube_kubelet_config }} --pod-manifest-path=/etc/kubernetes/manifests --cluster-dns={{ kube_cluster_dns }} --cluster-domain={{ kube_cluster_domain }}
+kube_node_kubelet_args: --kubeconfig={{ kube_kubelet_config }} --pod-manifest-path=/etc/kubernetes/manifests --cluster-dns={{ kube_cluster_dns }} --cluster-domain={{ kube_cluster_domain }}
 
 # Kubernetes kube_proxy configuration
 kube_pod_cidr_range: 10.201.0.0/16 # Also configured in kubernetes_master role

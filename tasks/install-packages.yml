@@ -6,11 +6,8 @@
     gpgkey: "{{ kube_yum_repo_gpg }}"
     gpgcheck: yes
     repo_gpgcheck: "{{ kube_yum_repo_repo_gpgcheck }}"
-- name: Ensure kubernetes binaries are installed
-  package: name={{ item }}-{{ kube_version }} state=latest
-  loop:
-    - kubelet
-    - kubectl
+- name: Ensure kubectl is installed
+  package: name=kubectl-{{ kube_version }} state=latest
 - name: Ensure config directories exist
   file: path=/var/lib/{{ item }} state=directory
   loop:
