@@ -1,7 +1,5 @@
-- include: generate-certs.yml
-  tags:
-  - generate-certs
-  - generate-certs-kube
+- name: Ensure base directory exists
+  file: path=/srv/kubernetes state=directory
 - include: install-packages.yml
   tags:
   - install-packages

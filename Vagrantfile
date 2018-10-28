@@ -49,7 +49,7 @@ Vagrant.configure("2") do |config|
 
       config.vm.provider "virtualbox" do |v|
         v.memory = node_memory
-        v.cpus = 1
+        v.cpus = 2
       end
 
       config.vm.provision "shell", inline: <<-SHELL
@@ -62,6 +62,9 @@ Vagrant.configure("2") do |config|
         config.vm.box_version = "1804.02.01"
         config.vm.provision "shell", inline: <<-SHELL
           mkdir -p /etc/ansible/roles
+          if [ -e /vagrant/ansible-role-kubernetes-master ]; then
+            ln -snf /vagrant/ansible-role-kubernetes-master /etc/ansible/roles/jumperfly.kubernetes_master
+          fi
           ln -snf /vagrant/ /etc/ansible/roles/jumperfly.kubernetes_node
           ansible-galaxy install --ignore-errors -r /vagrant/tests/requirements.yml -p /etc/ansible/roles
         SHELL
@@ -71,7 +74,8 @@ Vagrant.configure("2") do |config|
           ansible.playbook = "tests/test.yml"
           ansible.host_vars = host_vars
           ansible.groups = {
-            "ca_nodes": [ "node1" ],
+            "root_ca_nodes": [ "node1" ],
+            "intermediate_ca_nodes": [ "node1" ],
             "kube_master_nodes": kube_master_nodes,
             "etcd_nodes": kube_master_nodes,
             "kube_nodes": kube_nodes

@@ -13,20 +13,17 @@ kube_node_kubelet_args: --kubeconfig={{ kube_kubelet_config }} --pod-manifest-pa
 # Kubernetes kube_proxy configuration
 kube_pod_cidr_range: 10.201.0.0/16 # Also configured in kubernetes_master role
 
-# SSL configuration
-kube_key: /srv/kubernetes/server.key
-kube_cert: /srv/kubernetes/server.crt
-kube_ca_cert: /srv/kubernetes/ca.crt
-
-# Cert generation configuration
-ca_host: ca
-ca_dir: /etc/pki/CA/intermediate
-ca_host_cert: "{{ ca_dir }}/certs/intermediate-chain.crt"
-ca_organization_name: Ansible Certificate Authority
-
+# Kubelet certificate configuration
+kube_cert_ca_delegate_name: kubernetes-ca
+kube_cert_name: "kubelet-{{ ansible_hostname }}"
 kube_cert_common_name: "{{ ansible_hostname }}"
 kube_cert_country: GB
 kube_cert_city: London
 kube_cert_state: Greater London
-kube_cert_organization_name: Ansible Certificate Authority
-kube_cert_organizational_unit_name: Kubernetes Node
+kube_cert_organization_name: Ansible Certificate
+kube_cert_organizational_unit_name: Kubernetes
+
+# Kubelet certificate file locations
+kube_key: /srv/kubernetes/{{ kube_cert_name }}-key.pem
+kube_cert: /srv/kubernetes/{{ kube_cert_name }}.pem
+kube_ca_cert: /srv/kubernetes/kubernetes-ca-chain.pem

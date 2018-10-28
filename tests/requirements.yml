@@ -1,4 +1,4 @@
-- src: jumperfly.ca
+- src: jumperfly.root_ca
 - src: jumperfly.etcd_node
 - src: jumperfly.kubernetes_master
 - src: jumperfly.flannel
