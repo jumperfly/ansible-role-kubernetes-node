@@ -1,6 +1,8 @@
 dependencies:
-  - role: jumperfly.ansible_common
-  - role: jumperfly.ssl_cert
+  - src: jumperfly.ansible_common
+    version: v0.1.0
+  - src: jumperfly.ssl_cert
+    version: v0.1.0
     ssl_cert_ca_delegate_name: "{{ kube_cert_ca_delegate_name }}"
     ssl_cert_type: client
     ssl_cert_base_dir: /srv/kubernetes
@@ -11,7 +13,8 @@ dependencies:
     ssl_cert_state: "{{ kube_cert_state }}"
     ssl_cert_organization_name: "{{ kube_cert_organization_name }}"
     ssl_cert_organizational_unit_name: "{{ kube_cert_organizational_unit_name }}"
-  - role: jumperfly.kubelet
+  - src: jumperfly.kubelet
+    version: v0.1.0
     kubelet_args: "{{ kube_node_kubelet_args }}"
 
 galaxy_info:
