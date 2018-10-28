@@ -16,12 +16,13 @@ kube_pod_cidr_range: 10.201.0.0/16 # Also configured in kubernetes_master role
 # Kubelet certificate configuration
 kube_cert_ca_delegate_name: kubernetes-ca
 kube_cert_name: "kubelet-{{ ansible_hostname }}"
-kube_cert_common_name: "{{ ansible_hostname }}"
-kube_cert_country: GB
-kube_cert_city: London
-kube_cert_state: Greater London
-kube_cert_organization_name: Ansible Certificate
-kube_cert_organizational_unit_name: Kubernetes
+kube_cert_subject:
+  common_name: "{{ ansible_hostname }}"
+  country: GB
+  city: London
+  state: Greater London
+  organization_name: Ansible Certificate
+  organizational_unit_name: Kubernetes
 
 # Kubelet certificate file locations
 kube_key: /srv/kubernetes/{{ kube_cert_name }}-key.pem

@@ -74,8 +74,7 @@ Vagrant.configure("2") do |config|
           ansible.playbook = "tests/test.yml"
           ansible.host_vars = host_vars
           ansible.groups = {
-            "root_ca_nodes": [ "node1" ],
-            "intermediate_ca_nodes": [ "node1" ],
+            "ca_nodes": [ "node1" ],
             "kube_master_nodes": kube_master_nodes,
             "etcd_nodes": kube_master_nodes,
             "kube_nodes": kube_nodes
