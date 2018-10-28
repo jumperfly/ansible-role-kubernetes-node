@@ -3,5 +3,8 @@
 - src: jumperfly.etcd_node
   version: v0.1.0
 - src: jumperfly.kubernetes_master
+  version: v0.1.0
 - src: jumperfly.flannel
+  version: v0.1.0
 - src: jumperfly.coredns
+  version: v0.1.0
