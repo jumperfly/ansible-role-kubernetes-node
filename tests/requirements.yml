@@ -1,7 +1,7 @@
 - src: jumperfly.root_ca
   version: v0.1.0
 - src: jumperfly.etcd_node
-  version: V0.1.0
+  version: v0.1.0
 - src: jumperfly.kubernetes_master
 - src: jumperfly.flannel
 - src: jumperfly.coredns
