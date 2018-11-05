@@ -1,11 +1,11 @@
 dependencies:
   - src: jumperfly.ansible_common
-    version: v0.1.0
+    version: v0.2.0
   - src: jumperfly.ssl_cert
-    version: v0.1.0
+    version: v0.2.0
     ssl_cert_ca_delegate_name: "{{ kube_cert_ca_delegate_name }}"
     ssl_cert_type: client
-    ssl_cert_base_dir: /srv/kubernetes
+    ssl_cert_file_base_dir: /srv/kubernetes
     ssl_cert_name: "{{ kube_cert_name }}"
     ssl_cert_subject: "{{ kube_cert_subject }}"
   - src: jumperfly.kubelet
