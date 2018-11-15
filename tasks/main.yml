@@ -1,10 +1,30 @@
 - name: Ensure base directory exists
   file: path=/srv/kubernetes state=directory
-- include: install-packages.yml
-  tags:
-  - install-packages
-  - install-packages-kube
-- include: configure-services.yml
-  tags:
-  - configure-services
-  - configure-services-kube
+
+- name: Configure Kubernetes YUM repository
+  yum_repository:
+    name: kubernetes
+    description: kubernetes
+    baseurl: "{{ kube_yum_repo_url }}"
+    gpgkey: "{{ kube_yum_repo_gpg }}"
+    gpgcheck: yes
+    repo_gpgcheck: "{{ kube_yum_repo_repo_gpgcheck }}"
+- name: Ensure kubectl is installed
+  package: name=kubectl-{{ kube_version }} state=latest
+- name: Ensure config directories exist
+  file: path=/var/lib/{{ item }} state=directory
+  loop:
+    - kubelet
+    - kube-proxy
+- name: Copy kubeconfig files
+  template: src={{ item }}-kubeconfig.j2 dest=/var/lib/{{ item }}/kubeconfig
+  loop:
+    - kubelet
+    - kube-proxy
+
+- name: Pull hyperkube image
+  docker_image: name={{ kube_docker_registry }}/hyperkube tag=v{{ kube_version }}
+- name: Install kube-proxy pod
+  template: src=kube-proxy.json.j2 dest=/etc/kubernetes/manifests/kube-proxy.json
+- name: Wait for kube-proxy to start - 30 seconds
+  wait_for: port=10256 timeout=30
