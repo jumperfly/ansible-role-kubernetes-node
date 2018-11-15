@@ -1,11 +1,11 @@
 dependencies:
   - src: jumperfly.ssl_cert
-    version: v0.2.1
+    version: v0.3.0
     ssl_cert_ca_delegate_name: "{{ kube_cert_ca_delegate_name }}"
     ssl_cert_type: client
     ssl_cert_file_base_dir: /srv/kubernetes
     ssl_cert_name: "{{ kube_cert_name }}"
-    ssl_cert_subject: "{{ kube_cert_subject }}"
+    ssl_cert_subject_common_name: "{{ kube_cert_subject_common_name }}"
   - src: jumperfly.kubelet
     version: v0.1.0
     kubelet_args: "{{ kube_node_kubelet_args }}"
