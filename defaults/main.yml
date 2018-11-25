@@ -1,24 +1,16 @@
 # Kubernetes configuration
-kube_version: 1.12.1
 kube_docker_registry: k8s.gcr.io
 kube_apiserver_url: https://kubernetes:6443
-kube_iface: eth0
-kube_cluster_dns: 10.0.0.10 # Also configured in coredns role as coredns_cluster_ip
+kube_cluster_dns: 10.0.0.10
 kube_cluster_domain: cluster.local
 
 # Kubernetes kubelet configuration
-kube_kubelet_config: /var/lib/kubelet/kubeconfig
-kube_node_kubelet_args: --kubeconfig={{ kube_kubelet_config }} --pod-manifest-path=/etc/kubernetes/manifests --cluster-dns={{ kube_cluster_dns }} --cluster-domain={{ kube_cluster_domain }}
+kube_node_kubelet_args: --kubeconfig=/var/lib/kubelet/kubeconfig --pod-manifest-path=/etc/kubernetes/manifests --cluster-dns={{ kube_cluster_dns }} --cluster-domain={{ kube_cluster_domain }}
 
 # Kubernetes kube_proxy configuration
-kube_pod_cidr_range: 10.201.0.0/16 # Also configured in kubernetes_master role
+kube_pod_cidr_range: 10.201.0.0/16
 
-# Kubelet certificate configuration
-kube_cert_ca_delegate_name: kubernetes-ca
-kube_cert_name: "kubelet-{{ ansible_hostname }}"
-kube_cert_subject_common_name: "{{ ansible_hostname }}"
-
-# Kubelet certificate file locations
-kube_key: /srv/kubernetes/{{ kube_cert_name }}-key.pem
-kube_cert: /srv/kubernetes/{{ kube_cert_name }}.pem
-kube_ca_cert: /srv/kubernetes/{{ kube_cert_name }}-chain.pem
+# SSL Configuration
+kube_key: /srv/kubernetes/kubelet-{{ ansible_hostname }}-key.pem
+kube_cert: /srv/kubernetes/kubelet-{{ ansible_hostname }}.pem
+kube_ca_cert: /srv/kubernetes/kubelet-{{ ansible_hostname }}-chain.pem
