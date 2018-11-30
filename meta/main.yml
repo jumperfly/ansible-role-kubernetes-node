@@ -1,10 +1,10 @@
 dependencies:
   - src: jumperfly.kubelet
-    version: master
+    version: v0.1.1
     kubelet_args: "{{ kube_node_kubelet_args }}"
   - src: jumperfly.etcd_node
     when: kube_master
-    version: master
+    version: v0.3.0
     etcd_pod_install: yes
 
 galaxy_info:
