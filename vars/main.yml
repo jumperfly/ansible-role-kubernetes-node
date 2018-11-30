@@ -1,0 +1,4 @@
+# These are generally not expected to change, so defined in vars instead of defaults
+
+kube_apiserver_listen_ip: "{{ ansible_facts[kube_apiserver_iface].ipv4.address }}"
+kube_controller_manager_listen_ip: "{{ ansible_facts[kube_controller_manager_iface].ipv4.address }}"

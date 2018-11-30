@@ -1,0 +1,8 @@
+- name: Install kube-proxy pod
+  template:
+    dest: /etc/kubernetes/manifests/kube-proxy.json
+    src: kube-proxy.json.j2
+- name: Wait for kube-proxy to start - 30 seconds
+  wait_for:
+    port: 10256
+    timeout: 30

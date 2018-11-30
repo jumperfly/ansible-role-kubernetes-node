@@ -2,6 +2,10 @@ dependencies:
   - src: jumperfly.kubelet
     version: master
     kubelet_args: "{{ kube_node_kubelet_args }}"
+  - src: jumperfly.etcd_node
+    when: kube_master
+    version: master
+    etcd_pod_install: yes
 
 galaxy_info:
   role_name: kubernetes_node

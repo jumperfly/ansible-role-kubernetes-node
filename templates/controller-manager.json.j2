@@ -2,34 +2,29 @@
   "kind": "Pod",
   "apiVersion": "v1",
   "metadata": {
-    "name": "kube-proxy",
+    "name": "kube-controller-manager",
     "namespace": "kube-system"
   },
   "spec": {
     "hostNetwork": true,
     "containers": [
       {
-        "name": "kube-proxy",
+        "name": "kube-controller-manager",
         "image": "k8s.gcr.io/hyperkube:v{{ kube_version }}",
         "command": [
           "/hyperkube",
-          "kube-proxy",
-          "--master={{ kube_apiserver_url }}",
-          "--kubeconfig=/var/lib/kube-proxy/kubeconfig",
-          "--cluster-cidr={{ kube_pod_cidr_range }}"
+          "controller-manager",
+          "--allocate-node-cidrs",
+          "--bind-address={{ kube_controller_manager_listen_ip }}",
+          "--cluster-cidr={{ kube_pod_cidr_range }}",
+          "--service-account-private-key-file={{ kube_apiserver_key }}",
+          "--master=127.0.0.1:8080",
+          "--root-ca-file={{ kube_apiserver_ca_cert }}"
         ],
-        "securityContext": {
-          "privileged": true
-        },
         "volumeMounts": [
           {
             "name": "certdir",
             "mountPath": "{{ kube_cert_dir }}",
-            "readOnly": true
-          },
-          {
-            "name": "kubeconfig",
-            "mountPath": "/var/lib/kube-proxy/kubeconfig",
             "readOnly": true
           },
           {
@@ -41,7 +36,7 @@
           "httpGet": {
             "scheme": "HTTP",
             "host": "127.0.0.1",
-            "port": 10256,
+            "port": 10252,
             "path": "/healthz"
           },
           "initialDelaySeconds": 15,
@@ -54,12 +49,6 @@
         "name": "certdir",
         "hostPath": {
           "path": "{{ kube_cert_dir }}"
-        }
-      },
-      {
-        "name": "kubeconfig",
-        "hostPath": {
-          "path": "/var/lib/kube-proxy/kubeconfig"
         }
       },
       {

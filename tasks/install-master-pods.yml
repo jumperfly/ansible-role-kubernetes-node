@@ -1,0 +1,23 @@
+- name: Configure master pods
+  template:
+    dest: "/etc/kubernetes/manifests/{{ item }}.json"
+    src: "{{ item }}.json.j2"
+  loop:
+    - apiserver
+    - scheduler
+    - controller-manager
+  register: master_pods_result
+
+- name: Copy local kubeconfig
+  copy:
+    dest: /etc/kubernetes/kubeconfig-local
+    src: kubeconfig-local
+
+- name: Wait for apiserver to start - 30 seconds
+  uri:
+    url: http://127.0.0.1:8080/healthz
+    status_code: 200
+  register: result
+  until: result.status == 200
+  retries: 30
+  delay: 1
