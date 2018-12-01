@@ -1,6 +1,10 @@
 # Kubernetes Node Ansible Role
 Configures a Kubernetes node.
 
+When configured as a master the role includes `jumperfly.etcd_node`.
+This is not declared as a dependency to allow kubelet to be configured before
+running the etcd pod.
+
 SSL is enabled by default and requires certificates to be configured.
 See the [SSL Configuration](#ssl-configuration) section for more information.
 

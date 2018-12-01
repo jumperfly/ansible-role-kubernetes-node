@@ -1,3 +1,9 @@
+- name: Include etcd_node role
+  include_role:
+    name: jumperfly.etcd_node
+  vars:
+    etcd_install_mode: pod
+
 - name: Configure master pods
   template:
     dest: "/etc/kubernetes/manifests/{{ item }}.json"
