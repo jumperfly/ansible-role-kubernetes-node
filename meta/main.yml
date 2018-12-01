@@ -10,6 +10,7 @@ dependencies:
 galaxy_info:
   role_name: kubernetes_node
   author: jumperfly
+  company: jumperfly
   description: ansible-role-kubernetes-node
   license: Apache
   min_ansible_version: "2.0"
