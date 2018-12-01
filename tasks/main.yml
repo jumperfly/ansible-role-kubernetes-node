@@ -9,7 +9,7 @@
 - name: Ensure kubectl is installed
   package:
     name: kubectl-{{ kube_version }}
-    state: latest
+    state: installed
 - name: Ensure config directories exist
   file:
     path: /var/lib/{{ item }}
