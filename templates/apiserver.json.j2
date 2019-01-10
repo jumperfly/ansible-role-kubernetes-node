@@ -19,7 +19,7 @@
           "--bind-address={{ kube_apiserver_listen_ip }}",
           "--etcd-servers=
             {%- for h in groups[kube_apiserver_etcd_group] -%}
-              https://{{ h }}:2379
+              https://{{ hostvars[h].listen_ip | default(h) }}:2379
               {%- if not loop.last %},{% endif %}
             {%- endfor -%}
           ",
