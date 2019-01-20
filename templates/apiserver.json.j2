@@ -29,7 +29,9 @@
           "--enable-admission-plugins={{ kube_apiserver_admission_plugins }}",
           "--tls-cert-file={{ kube_apiserver_cert }}",
           "--tls-private-key-file={{ kube_apiserver_key }}",
-          "--client-ca-file={{ kube_apiserver_ca_cert }}"
+          "--client-ca-file={{ kube_apiserver_ca_cert }}",
+          "--authorization-mode=Node,RBAC",
+          "--anonymous-auth=true"
         ],
         "ports": [
           {

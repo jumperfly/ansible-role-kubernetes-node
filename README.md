@@ -43,7 +43,8 @@ The `jumperfly.ssl_cert` role can be used to generate them if required. For exam
     ssl_cert_file_base_dir: /srv/kubernetes
     ssl_cert_name: "kubelet-{{ ansible_hostname }}"
     ssl_cert_ca_delegate_name: kubernetes-ca
-    ssl_cert_subject_common_name: "{{ ansible_hostname }}"
+    ssl_cert_subject_common_name: "system:node:{{ ansible_hostname }}"
+    ssl_cert_subject_organization_name: "system:nodes"
 ```
 
 | Key | Description |

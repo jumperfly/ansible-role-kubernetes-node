@@ -21,7 +21,7 @@ kube_master_taint_node: yes
 kube_apiserver_iface:  "{{ ansible_default_ipv4.alias }}"
 kube_controller_manager_iface:  "{{ ansible_default_ipv4.alias }}"
 kube_apiserver_etcd_group: etcd_nodes
-kube_apiserver_admission_plugins: NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota
+kube_apiserver_admission_plugins: NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota,NodeRestriction
 
 # Kubernetes kube_proxy configuration
 kube_pod_cidr_range: 10.201.0.0/16
