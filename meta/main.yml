@@ -1,6 +1,6 @@
 dependencies:
   - src: jumperfly.kubelet
-    version: v0.1.1
+    version: v0.1.2
     kubelet_args: "{{ kube_node_kubelet_args }}"
 
 galaxy_info:
