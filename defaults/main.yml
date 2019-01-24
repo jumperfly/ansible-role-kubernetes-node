@@ -31,6 +31,9 @@ kube_cert_dir: /srv/kubernetes
 kube_key: "{{ kube_cert_dir }}/kubelet-{{ ansible_hostname }}-key.pem"
 kube_cert: "{{ kube_cert_dir }}/kubelet-{{ ansible_hostname }}.pem"
 kube_ca_cert: "{{ kube_cert_dir }}/kubelet-{{ ansible_hostname }}-chain.pem"
+kube_proxy_key: "{{ kube_cert_dir }}/kube-proxy-{{ ansible_hostname }}-key.pem"
+kube_proxy_cert: "{{ kube_cert_dir }}/kube-proxy-{{ ansible_hostname }}.pem"
+kube_proxy_ca_cert: "{{ kube_cert_dir }}/kube-proxy-{{ ansible_hostname }}-chain.pem"
 
 # SSL configuration - apiserver
 kube_apiserver_etcd_key: "{{ kube_cert_dir }}/apiserver-{{ ansible_hostname }}-etcd-key.pem"
