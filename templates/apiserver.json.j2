@@ -19,7 +19,8 @@
           "--bind-address={{ kube_apiserver_listen_ip }}",
           "--etcd-servers=
             {%- for h in groups[kube_apiserver_etcd_group] -%}
-              https://{{ hostvars[h].listen_ip | default(h) }}:2379
+              {%- set iface = hostvars[h].etcd_iface | default(hostvars[h].ansible_default_ipv4.alias) -%}
+              https://{{ hostvars[h]['ansible_' + iface].ipv4.address }}:2379
               {%- if not loop.last %},{% endif %}
             {%- endfor -%}
           ",
