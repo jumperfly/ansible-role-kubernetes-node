@@ -1,22 +1,6 @@
-- name: Configure Kubernetes YUM repository
-  yum_repository:
-    name: kubernetes
-    description: kubernetes
-    baseurl: "{{ kube_yum_repo_url }}"
-    gpgkey: "{{ kube_yum_repo_gpg }}"
-    gpgcheck: yes
-    repo_gpgcheck: "{{ kube_yum_repo_repo_gpgcheck }}"
-- name: Ensure kubectl is installed
-  package:
-    name: kubectl-{{ kube_version }}
-    state: installed
-- name: Ensure config directories exist
-  file:
-    path: /var/lib/{{ item }}
-    state: directory
-  loop:
-    - kubelet
-    - kube-proxy
+- include_tasks: install-kube-node-packages.yml
+  tags: kube_node_packages
+
 - name: Copy kubeconfig files
   template:
     dest: /var/lib/{{ item }}/kubeconfig
@@ -24,14 +8,13 @@
   loop:
     - kubelet
     - kube-proxy
-- name: Pull hyperkube image
-  docker_image:
-    name: "{{ kube_docker_registry }}/hyperkube"
-    tag: v{{ kube_version }}
+  tags: kube_config
 
 - name: Include install-master-pods.yml
   when: kube_master
   include_tasks: install-master-pods.yml
+  tags: kube_master_pods
 
 - name: Include install-kube-proxy.yml
   include_tasks: install-kube-proxy.yml
+  tags: kube_proxy
