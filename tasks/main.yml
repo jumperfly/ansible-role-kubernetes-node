@@ -10,11 +10,6 @@
     - kube-proxy
   tags: kube_config
 
-- name: Include install-master-pods.yml
-  when: kube_master
-  include_tasks: install-master-pods.yml
-  tags: kube_master_pods
-
 - name: Include install-kube-proxy.yml
   include_tasks: install-kube-proxy.yml
   tags: kube_proxy

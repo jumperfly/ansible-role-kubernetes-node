@@ -1,14 +1,6 @@
-- name: Configure Kubernetes YUM repository
-  yum_repository:
-    name: kubernetes
-    description: kubernetes
-    baseurl: "{{ kube_yum_repo_url }}"
-    gpgkey: "{{ kube_yum_repo_gpg }}"
-    gpgcheck: yes
-    repo_gpgcheck: "{{ kube_yum_repo_repo_gpgcheck }}"
 - name: Ensure kubectl is installed
   package:
-    name: kubectl-{{ kube_version }}
+    name: kubectl-{{ kube_node_version }}
     state: installed
 - name: Ensure config directories exist
   file:
@@ -17,7 +9,3 @@
   loop:
     - kubelet
     - kube-proxy
-- name: Pull hyperkube image
-  docker_image:
-    name: "{{ kube_docker_registry }}/hyperkube"
-    tag: v{{ kube_version }}

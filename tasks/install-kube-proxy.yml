@@ -1,7 +1,17 @@
-- name: Install kube-proxy pod
+- name: Download kubernetes node binaries
+  get_url:
+    url: https://storage.googleapis.com/kubernetes-release/release/v{{ kube_node_version }}/bin/linux/amd64/kube-proxy
+    dest: /usr/local/bin/kube-proxy
+    mode: "755"
+- name: Create service files
   template:
-    dest: /etc/kubernetes/manifests/kube-proxy.json
-    src: kube-proxy.json.j2
+    src: kube-proxy.service.j2
+    dest: /etc/systemd/system/kube-proxy.service
+- name: Enable services
+  service:
+    name: kube-proxy
+    state: started
+    enabled: yes
 - name: Wait for kube-proxy to start - 30 seconds
   wait_for:
     port: 10256

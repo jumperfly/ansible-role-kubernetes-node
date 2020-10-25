@@ -1,0 +1,18 @@
+- include_role:
+    name: jumperfly.ssl_cert
+  vars:
+    ssl_cert_type: peer
+    ssl_cert_name: kubelet-{{ item }}
+    ssl_cert_subject_common_name: "system:node:{{ item }}"
+    ssl_cert_subject_organization_name: "system:nodes"
+    ssl_cert_hosts:
+      - "system:node:{{ item }}"
+      - "{{ item }}"
+  loop: "{{ kube_node_name_list }}"
+- include_role:
+    name: jumperfly.ssl_cert
+  vars:
+    ssl_cert_type: client
+    ssl_cert_name: kube-proxy
+    ssl_cert_subject_common_name: "system:kube-proxy"
+    ssl_cert_subject_organization_name: "system:node-proxier"

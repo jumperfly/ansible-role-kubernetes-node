@@ -1,44 +1,27 @@
-# Kubernetes configuration
-kube_docker_registry: k8s.gcr.io
+kube_node_version: "{{ kube_version | default('1.13.1') }}"
 kube_apiserver_url: https://kubernetes:6443
-kube_cluster_dns: 10.0.0.10
-kube_cluster_domain: cluster.local
 
 # Kubernetes kubelet configuration
+kube_cluster_dns: 10.0.0.10
+kube_cluster_domain: cluster.local
+kube_node_iface: eth0 
 kube_node_kubelet_args: >-
   --kubeconfig=/var/lib/kubelet/kubeconfig
   --pod-manifest-path=/etc/kubernetes/manifests
   --cluster-dns={{ kube_cluster_dns }}
   --cluster-domain={{ kube_cluster_domain }}
-  {% if kube_master -%}
-    --node-labels kubernetes.io/role=master
-    {%- if kube_master_taint_node %} --register-with-taints dedicated=master:NoSchedule{% endif %}
-  {%- endif %}
-
-# Master node Configuration
-kube_master: no
-kube_master_taint_node: yes
-kube_apiserver_iface:  "{{ ansible_default_ipv4.alias }}"
-kube_controller_manager_iface:  "{{ ansible_default_ipv4.alias }}"
-kube_apiserver_etcd_group: etcd_nodes
-kube_apiserver_admission_plugins: NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota,NodeRestriction
+  --hostname-override={{ ansible_hostname }}
+  --tls-cert-file={{ kube_cert }}
+  --tls-private-key-file={{ kube_key }}
 
 # Kubernetes kube_proxy configuration
 kube_pod_cidr_range: 10.201.0.0/16
 
 # SSL configuration
-kube_cert_dir: /srv/kubernetes
-kube_key: "{{ kube_cert_dir }}/kubelet-{{ ansible_hostname }}-key.pem"
-kube_cert: "{{ kube_cert_dir }}/kubelet-{{ ansible_hostname }}.pem"
-kube_ca_cert: "{{ kube_cert_dir }}/kubelet-{{ ansible_hostname }}-chain.pem"
-kube_proxy_key: "{{ kube_cert_dir }}/kube-proxy-{{ ansible_hostname }}-key.pem"
-kube_proxy_cert: "{{ kube_cert_dir }}/kube-proxy-{{ ansible_hostname }}.pem"
-kube_proxy_ca_cert: "{{ kube_cert_dir }}/kube-proxy-{{ ansible_hostname }}-chain.pem"
-
-# SSL configuration - apiserver
-kube_apiserver_etcd_key: "{{ kube_cert_dir }}/apiserver-{{ ansible_hostname }}-etcd-key.pem"
-kube_apiserver_etcd_cert: "{{ kube_cert_dir }}/apiserver-{{ ansible_hostname }}-etcd.pem"
-kube_apiserver_etcd_ca_cert: "{{ kube_cert_dir }}/apiserver-{{ ansible_hostname }}-etcd-chain.pem"
-kube_apiserver_key: "{{ kube_cert_dir }}/apiserver-{{ ansible_hostname }}-kube-key.pem"
-kube_apiserver_cert: "{{ kube_cert_dir }}/apiserver-{{ ansible_hostname }}-kube.pem"
-kube_apiserver_ca_cert: "{{ kube_cert_dir }}/apiserver-{{ ansible_hostname }}-kube-chain.pem"
+kube_node_cert_dir: /var/lib/kubernetes
+kube_key: "{{ kube_node_cert_dir }}/kubelet-{{ ansible_hostname }}-key.pem"
+kube_cert: "{{ kube_node_cert_dir }}/kubelet-{{ ansible_hostname }}.pem"
+kube_ca_cert: "{{ kube_node_cert_dir }}/kubelet-{{ ansible_hostname }}-chain.pem"
+kube_proxy_key: "{{ kube_node_cert_dir }}/kube-proxy-key.pem"
+kube_proxy_cert: "{{ kube_node_cert_dir }}/kube-proxy.pem"
+kube_proxy_ca_cert: "{{ kube_node_cert_dir }}/kube-proxy-chain.pem"

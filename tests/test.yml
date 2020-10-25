@@ -1,0 +1,31 @@
+- hosts: default
+  become: yes
+  vars:
+    ssl_cert_ca_delegate: default
+    ssl_cert_ca_delegate_name: kubernetes-ca
+    etcd_client_listen_ip: "0.0.0.0"
+    kube_master_cert_dir: /vagrant/tests/vagrant_certs/master
+    kube_node_cert_dir: /vagrant/tests/vagrant_certs/node
+    kube_apiserver_url: https://127.0.0.1:6443
+    flannel_apiserver_delegate: default
+  pre_tasks:
+    - name: Set facts
+      set_fact:
+        etcd_client_listen_ip: "{{ etcd_client_listen_ip }}"
+    - name: Check if node certs exist
+      stat:
+        path: "{{ kube_node_cert_dir }}/kube-proxy.pem"
+      register: stat_node_cert_result
+    - name: Include generate-node-certs.yml
+      include_role:
+        role: kubernetes_node
+        tasks_from: certs/generate-node-certs.yml
+      vars:
+        skip_role_dependencies: yes
+        ssl_cert_file_base_dir: "{{ kube_node_cert_dir }}"
+        kube_node_name_list:
+          - worker1
+  roles:
+    - jumperfly.ansible_common
+    - kubernetes_node
+    - jumperfly.flannel
